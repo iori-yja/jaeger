@@ -27,6 +27,9 @@ const (
 	collectorNumWorkers    = "collector.num-workers"
 	collectorPort          = "collector.port"
 	collectorHTTPPort      = "collector.http-port"
+	collectorHTTPS         = "collector.http.tls"
+	collectorHTTPSCert     = "collector.http.tls.cert"
+	collectorHTTPSKey      = "collector.http.tls.key"
 	collectorGRPCPort      = "collector.grpc-port"
 	collectorGRPCTLS       = "collector.grpc.tls"
 	collectorGRPCCert      = "collector.grpc.tls.cert"
@@ -50,6 +53,12 @@ type CollectorOptions struct {
 	CollectorPort int
 	// CollectorHTTPPort is the port that the collector service listens in on for http requests
 	CollectorHTTPPort int
+	// CollectorHTTPS defines if the http server is setup as https
+	CollectorHTTPS bool
+	// CollectorHTTPSCert is the path to a TLS certificate file for the server
+	CollectorHTTPSCert string
+	// CollectorHTTPSKey is the path to a TLS key file for the server
+	CollectorHTTPSKey string
 	// CollectorGRPCPort is the port that the collector service listens in on for gRPC requests
 	CollectorGRPCPort int
 	// CollectorGRPCTLS defines if the server is setup with TLS
@@ -73,6 +82,9 @@ func AddFlags(flags *flag.FlagSet) {
 	flags.Bool(collectorGRPCTLS, false, "Enable TLS")
 	flags.String(collectorGRPCCert, "", "Path to TLS certificate file")
 	flags.String(collectorGRPCKey, "", "Path to TLS key file")
+	flags.Bool(collectorHTTPS, false, "Enable TLS")
+	flags.String(collectorHTTPSCert, "", "Path to TLS certificate file")
+	flags.String(collectorHTTPSKey, "", "Path to TLS key file")
 }
 
 // InitFromViper initializes CollectorOptions with properties from viper
@@ -82,6 +94,9 @@ func (cOpts *CollectorOptions) InitFromViper(v *viper.Viper) *CollectorOptions {
 	cOpts.CollectorPort = v.GetInt(collectorPort)
 	cOpts.CollectorHTTPPort = v.GetInt(collectorHTTPPort)
 	cOpts.CollectorGRPCPort = v.GetInt(collectorGRPCPort)
+	cOpts.CollectorHTTPS = v.GetBool(collectorHTTPS)
+	cOpts.CollectorHTTPSCert = v.GetString(collectorHTTPSCert)
+	cOpts.CollectorHTTPSKey = v.GetString(collectorHTTPSKey)
 	cOpts.CollectorGRPCTLS = v.GetBool(collectorGRPCTLS)
 	cOpts.CollectorGRPCCert = v.GetString(collectorGRPCCert)
 	cOpts.CollectorGRPCKey = v.GetString(collectorGRPCKey)
